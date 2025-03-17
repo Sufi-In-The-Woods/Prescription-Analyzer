@@ -6,6 +6,7 @@ from groq_api_key import groq_api_key  # Import the Groq API key
 # Initialize Groq client with the imported key
 client = Groq(api_key=groq_api_key)
 
+# System prompt for analyzing prescriptions and medical test reports
 system_prompt = """
 You are an expert in analyzing medical documents, including prescriptions and medical test reports. You are tasked with examining images of these documents (handwritten or typed) to extract and interpret key information for a healthcare provider. Your expertise will help in identifying medication details from prescriptions or explaining test results from medical reports.
 
@@ -51,19 +52,19 @@ Please provide the final response with these headings:
 """
 
 # Streamlit UI configuration
-st.set_page_config(page_title="Prescription Analyzer", page_icon="💊", layout="wide")
-st.title("Prescription Analyzer 💊")
-st.subheader("An app to extract and analyze prescription details from images")
+st.set_page_config(page_title="Medical Document Analyzer", page_icon="📝", layout="wide")
+st.title("Medical Document Analyzer 📝")
+st.subheader("An app to analyze prescriptions and medical test reports from images")
 
 # File uploader
-file_uploaded = st.file_uploader("Upload the prescription image for analysis", type=["png", "jpg", "jpeg"])
+file_uploaded = st.file_uploader("Upload a prescription or medical test report image for analysis", type=["png", "jpg", "jpeg"])
 
 # Display uploaded image
 if file_uploaded:
-    st.image(file_uploaded, width=200, caption="Uploaded Prescription")
+    st.image(file_uploaded, width=200, caption="Uploaded Document")
 
 # Submit button
-submit = st.button("Analyze Prescription")
+submit = st.button("Analyze Document")
 
 # Process the image and generate analysis
 if submit and file_uploaded:
@@ -91,7 +92,7 @@ if submit and file_uploaded:
             ]
 
             # Call Groq API
-            with st.spinner("Analyzing prescription..."):
+            with st.spinner("Analyzing document..."):
                 response = client.chat.completions.create(
                     model="llama-3.2-11b-vision-preview",  # Multimodal model
                     messages=messages,
@@ -101,13 +102,13 @@ if submit and file_uploaded:
 
             # Display response
             if response and response.choices:
-                st.title("Analysis of the Uploaded Prescription")
+                st.title("Analysis of the Uploaded Document")
                 st.markdown(response.choices[0].message.content)
             else:
                 st.error("No response received from the API.")
 
     except Exception as e:
-        st.error(f"Error analyzing prescription: {str(e)}")
+        st.error(f"Error analyzing document: {str(e)}")
         if isinstance(e, client.APIConnectionError):
             st.write("Could not connect to the Groq API. Check your network or API key.")
         elif isinstance(e, client.RateLimitError):
