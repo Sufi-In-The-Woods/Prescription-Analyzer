@@ -366,7 +366,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 st.markdown("---")
 st.markdown("""
     <div class="footer">
-        <p><strong>EarlyMed</strong> | Powered by Groq API | Date: March 18, 2025</p>
+        <p><strong>EarlyMed</strong> | Team EarlyMed | Date: March 18, 2025</p>
         <p>Developed by our team at <b>VIT-AP University</b> as part of our mission to make healthcare more accessible through technology.</p>
         <p>Our goal is to help users better understand their health information and leverage AI for improved health literacy.</p>
     </div>
