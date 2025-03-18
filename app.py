@@ -201,7 +201,8 @@ For Prescriptions:
    - Patient information (if visible, without mentioning specific names)
    - Refill information and special instructions
 3. Plain Language Explanation: Provide a simplified explanation of what each medication is typically used for and any important administration details.
-4. Critical Warnings: Highlight any potential drug interactions, common side effects, or special precautions patients should be aware of.
+4. Try to explain why each of the medicine were prescribed and what could be its generic name, possible side effects.
+5. Critical Warnings: Highlight any potential drug interactions, common side effects, or special precautions patients should be aware of.
 
 For Medical Test Reports:
 1. Document Identification: Confirm the document is a medical test report and identify the type of test.
@@ -414,7 +415,7 @@ st.markdown('</div>', unsafe_allow_html=True)
 st.markdown("---")
 st.markdown("""
 <div class="footer-text">
-    <p><strong>EarlyMed</strong> | Powered by Groq API | Date: March 18, 2025</p>
+    <p><strong>EarlyMed</strong> | Developed by Team Sisyphus </p>
     <p>A platform developed by our team at <b>VIT-AP University</b>.</p>
     <p>Our goal is to help users stay aware of their health and leverage technology and AI for a healthier life.</p>
 </div>
