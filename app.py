@@ -7,14 +7,9 @@ from groq_api_key import groq_api_key  # Import the Groq API key
 client = Groq(api_key=groq_api_key)
 
 # Streamlit UI configuration (MUST BE FIRST STREAMLIT COMMAND)
-st.set_page_config(
-    page_title="EarlyMed Analyzer", 
-    page_icon="🏥", 
-    layout="wide",
-    initial_sidebar_state="collapsed"
-)
+st.set_page_config(page_title="EarlyMed MediScript Analyzer", page_icon="📝", layout="wide")
 
-# Enhanced system prompt for medical document analysis
+# System prompt for medical image analysis (assuming it’s the same or similar)
 system_prompt = """
 You are a domain expert in medical image analysis. You are tasked with 
 examining medical images for a renowned hospital.
@@ -48,203 +43,81 @@ Please provide the final response with these 4 headings:
 Detailed Analysis, Analysis Report, Recommendations, and Treatments
 """
 
-# Custom CSS for a professional medical UI
+# Custom CSS for a glassy, professional medical UI
 st.markdown("""
     <style>
     /* Background and global styling */
     .stApp {
-        background: linear-gradient(135deg, #f0f5fa 0%, #ffffff 100%);
+        background: linear-gradient(135deg, #e6f0fa 0%, #f5f7fa 100%);
         font-family: 'Segoe UI', sans-serif;
     }
-    
-    /* Header logo styling */
-    .logo-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 0;
-        padding: 10px;
-    }
-    .logo-container img {
-        max-height: 120px;
-    }
-    
     /* Glassy container */
     .glass-container {
-        background: rgba(255, 255, 255, 0.92);
-        border-radius: 12px;
-        padding: 25px;
-        box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.5);
-        margin-bottom: 25px;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        margin-bottom: 20px;
     }
-    
     /* Title styling */
     h1 {
-        color: #0d4a8a;
+        color: #1e3a8a;
         font-weight: 700;
         text-align: center;
-        margin-top: 0;
     }
-    
     /* Subheader styling */
     h2 {
-        color: #2271b8;
+        color: #3b82f6;
         font-weight: 500;
         text-align: center;
     }
-    
     /* Button styling */
     .stButton>button {
-        background-color: #0d4a8a;
+        background-color: #1e3a8a;
         color: white;
-        border-radius: 8px;
-        padding: 12px 24px;
-        font-weight: 600;
+        border-radius: 10px;
+        padding: 10px 20px;
+        font-weight: bold;
         transition: all 0.3s ease;
-        width: 100%;
-        margin-top: 10px;
     }
     .stButton>button:hover {
-        background-color: #2271b8;
-        box-shadow: 0 4px 15px rgba(34, 113, 184, 0.4);
-        transform: translateY(-2px);
+        background-color: #3b82f6;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
     }
-    
     /* File uploader styling */
     .stFileUploader {
-        border: 2px dashed #2271b8;
+        border: 2px dashed #1e3a8a;
         border-radius: 10px;
-        padding: 15px;
+        padding: 10px;
         background: rgba(255, 255, 255, 0.9);
     }
-    
-    /* Progress bar */
-    .stProgress > div > div {
-        background-color: #2271b8;
-    }
-    
-    /* Spinner */
-    .stSpinner > div {
-        border-top-color: #0d4a8a !important;
-    }
-    
-    /* How it works section */
-    .how-it-works {
-        background: rgba(240, 248, 255, 0.8);
-        border-radius: 10px;
-        padding: 20px;
-        border-left: 4px solid #2271b8;
-        margin: 25px 0;
-    }
-    .how-it-works h3 {
-        color: #0d4a8a;
-        margin-top: 0;
-    }
-    .step {
-        display: flex;
-        align-items: flex-start;
-        margin-bottom: 15px;
-    }
-    .step-number {
-        background: #0d4a8a;
-        color: white;
-        width: 25px;
-        height: 25px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-right: 15px;
-        flex-shrink: 0;
-    }
-    
-    /* Result styling */
-    .result-container h2 {
-        border-bottom: 2px solid #e6f0fa;
-        padding-bottom: 10px;
-        margin-bottom: 20px;
-    }
-    
     /* Footer styling */
     .footer {
         text-align: center;
         color: #4b5e7e;
         font-size: 14px;
-        margin-top: 30px;
-        padding: 15px;
-        background: rgba(255, 255, 255, 0.7);
-        border-radius: 8px;
-    }
-    
-    /* Custom for two-column layout */
-    .upload-container {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    /* Responsive tweaks */
-    @media (max-width: 768px) {
-        .logo-container img {
-            max-height: 80px;
-        }
-        .glass-container {
-            padding: 15px;
-        }
+        margin-top: 20px;
     }
     </style>
 """, unsafe_allow_html=True)
 
-# Logo display
-st.markdown("""
-    <div class="logo-container">
-        <img src="https://i.postimg.cc/ZRSsW8hC/logo.png" alt="EarlyMed Logo">
-    </div>
-""", unsafe_allow_html=True)
-
-# Main header in a glassy container
+# Main content in a glassy container
 with st.container():
     st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-    st.title("EarlyMed Prescription and Test Report Analyzer")
+    st.title("EarlyMed Prescription and Test Report Analyzer 📝 🩺 🏥")
     st.subheader("AI-Powered Medical Document Analysis")
     st.markdown('</div>', unsafe_allow_html=True)
 
-# Two-column layout for upload and instructions
-col1, col2 = st.columns([3, 2])
-
 # File uploader and image display in a glassy container
-with col1:
-    st.markdown('<div class="glass-container upload-container">', unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>Upload Your Medical Document</h3>", unsafe_allow_html=True)
-    
-    file_uploaded = st.file_uploader("Select a prescription, lab report or medical test result", 
-                                    type=["png", "jpg", "jpeg"], 
-                                    help="Supported formats: JPG, JPEG, PNG")
-    
-    if file_uploaded:
-        st.image(file_uploaded, width=400, caption="Uploaded Medical Document")
-        st.markdown("<p style='text-align: center; font-style: italic; color: #666;'>Document preview shown above</p>", unsafe_allow_html=True)
-    
-    submit = st.button("Analyze Document")
-    st.markdown('</div>', unsafe_allow_html=True)
-
-# Instructions in a glassy container
-with col2:
+with st.container():
     st.markdown('<div class="glass-container">', unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center;'>How to Use</h3>", unsafe_allow_html=True)
-    st.markdown("""
-        <ol>
-            <li><strong>Upload</strong> a clear image of your prescription, lab report, or medical test result</li>
-            <li><strong>Click</strong> the "Analyze Document" button</li>
-            <li><strong>Wait</strong> a few seconds for our AI to process your document</li>
-            <li><strong>Review</strong> the detailed analysis and simplified explanation</li>
-        </ol>
-        
-        <p style="background-color: #f8f9fa; padding: 10px; border-left: 3px solid #2271b8; margin-top: 15px;">
-            <strong>Privacy Note:</strong> Your document is processed securely and not stored on our servers.
-        </p>
-    """, unsafe_allow_html=True)
+    file_uploaded = st.file_uploader("Upload a Medical Image for Analysis", type=["png", "jpg", "jpeg"])
+    if file_uploaded:
+        st.image(file_uploaded, width=300, caption="Uploaded Medical Image")
+    submit = st.button("Generate Analysis")
     st.markdown('</div>', unsafe_allow_html=True)
 
 # Process the image and generate analysis
@@ -273,101 +146,39 @@ if submit and file_uploaded:
             ]
 
             # Call Groq API
-            with st.spinner("Analyzing your medical document... This may take a moment."):
-                progress_bar = st.progress(0)
-                for i in range(100):
-                    import time
-                    time.sleep(0.03)
-                    progress_bar.progress(i + 1)
-                
+            with st.spinner("Analyzing Image..."):
                 response = client.chat.completions.create(
                     model="llama-3.2-11b-vision-preview",  # Multimodal model
                     messages=messages,
                     max_tokens=8192,
-                    temperature=0.7,
+                    temperature=1.0,
                 )
 
             # Display response in a glassy container
             if response and response.choices:
                 with st.container():
-                    st.markdown('<div class="glass-container result-container">', unsafe_allow_html=True)
+                    st.markdown('<div class="glass-container">', unsafe_allow_html=True)
                     st.title("Analysis Results")
                     st.markdown(response.choices[0].message.content)
-                    
-                    # Download button for the analysis
-                    result_text = response.choices[0].message.content
-                    b64 = base64.b64encode(result_text.encode()).decode()
-                    href = f'<a href="data:file/txt;base64,{b64}" download="EarlyMed_Analysis.txt" style="text-decoration:none;">'+\
-                        '<div style="text-align:center;margin-top:20px;"><button style="background-color:#0d4a8a;color:white;padding:10px 20px;border:none;border-radius:5px;cursor:pointer;">Download Analysis as Text</button></div></a>'
-                    st.markdown(href, unsafe_allow_html=True)
-                    
                     st.markdown('</div>', unsafe_allow_html=True)
             else:
                 st.error("No response received from the API.")
 
     except Exception as e:
         st.error(f"Error generating analysis: {str(e)}")
-        if hasattr(client, 'APIConnectionError') and isinstance(e, client.APIConnectionError):
+        if isinstance(e, client.APIConnectionError):
             st.write("Could not connect to the Groq API. Check your network or API key.")
-        elif hasattr(client, 'RateLimitError') and isinstance(e, client.RateLimitError):
+        elif isinstance(e, client.RateLimitError):
             st.write("Rate limit exceeded. Please wait and try again.")
-        elif hasattr(client, 'APIStatusError') and isinstance(e, client.APIStatusError):
+        elif isinstance(e, client.APIStatusError):
             st.write(f"API returned an error: {e.status_code} - {e.response}")
-
-# How it works section
-st.markdown('<div class="how-it-works">', unsafe_allow_html=True)
-st.markdown("<h3>How EarlyMed Works</h3>", unsafe_allow_html=True)
-st.markdown("""
-    <div class="step">
-        <div class="step-number">1</div>
-        <div>
-            <strong>Document Upload:</strong> When you upload a medical document image, it's securely transmitted to our system.
-        </div>
-    </div>
-    
-    <div class="step">
-        <div class="step-number">2</div>
-        <div>
-            <strong>AI Processing:</strong> The Groq API powered by llama-3.2-11b-vision-preview model analyzes the visual content of your document.
-        </div>
-    </div>
-    
-    <div class="step">
-        <div class="step-number">3</div>
-        <div>
-            <strong>Medical Analysis:</strong> The AI identifies medications, dosages, test results, and medical terminology within the document.
-        </div>
-    </div>
-    
-    <div class="step">
-        <div class="step-number">4</div>
-        <div>
-            <strong>Plain Language Translation:</strong> Medical jargon is translated into simple, easy-to-understand explanations.
-        </div>
-    </div>
-    
-    <div class="step">
-        <div class="step-number">5</div>
-        <div>
-            <strong>Structured Response:</strong> You receive a comprehensive analysis with sections for overview, detailed analysis, 
-            simplified explanation, important considerations, and recommended actions.
-        </div>
-    </div>
-    
-    <p style="margin-top: 20px; padding: 10px; background-color: rgba(255, 255, 240, 0.7); border-radius: 5px;">
-        <strong>Note:</strong> EarlyMed is designed to help you better understand your medical documents, but it is not a replacement 
-        for professional medical advice. Always consult with your healthcare provider for proper interpretation of your medical documents 
-        and before making any healthcare decisions.
-    </p>
-""", unsafe_allow_html=True)
-st.markdown('</div>', unsafe_allow_html=True)
 
 # Footer
 st.markdown("---")
 st.markdown("""
     <div class="footer">
-        <p><strong>EarlyMed</strong> | Team EarlyMed | Date: March 18, 2025</p>
-        <p>Developed by our team at <b>VIT-AP University</b> as part of our mission to make healthcare more accessible through technology.</p>
-        <p>Our goal is to help users better understand their health information and leverage AI for improved health literacy.</p>
+        Team EarlyMed<br>
+        A side project of <b>EarlyMed</b>, a platform developed by our team at <b>VIT-AP University</b>.<br>
+        Our goal is to help users stay aware of their health and leverage technology and AI for a healthier life.
     </div>
 """, unsafe_allow_html=True)
